@@ -564,19 +564,30 @@ export default {
 }
 
 .project-view-btn {
-  padding: 12px 25px;
+  padding: 8px 20px;
   background-color: var(--white);
   color: var(--primary-color);
-  border-radius: 30px;
+  border-radius: 25px;
   text-decoration: none;
   font-weight: 500;
+  font-size: 0.9rem;
   transform: translateY(20px);
   transition: all 0.4s ease;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.project-view-btn i {
+  font-size: 0.8rem;
 }
 
 .project-card:hover .project-view-btn {
   transform: translateY(0);
+  background-color: var(--primary-color);
+  color: var(--white);
+  box-shadow: 0 8px 25px rgba(25, 118, 210, 0.4);
 }
 
 .project-info {
@@ -742,17 +753,84 @@ export default {
   }
   
   .projects-grid {
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .project-card {
+    margin: 0 10px;
+  }
+  
+  .project-image {
+    height: 200px;
+  }
+  
+  .project-info {
+    padding: 20px;
+  }
+  
+  .project-title {
+    font-size: 1.3rem;
+  }
+  
+  .project-description {
+    font-size: 0.9rem;
+  }
+  
+  .project-view-btn {
+    padding: 6px 16px;
+    font-size: 0.85rem;
   }
   
   .skills-section, .featured-projects, .media-section {
-    padding: 80px 0;
+    padding: 60px 0;
+  }
+  
+  .section-title {
+    font-size: 2rem;
+    margin-bottom: 30px;
+  }
+  
+  .skill-card {
+    padding: 20px;
+  }
+  
+  .skill-icon {
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+  }
+  
+  .skill-card h3 {
+    font-size: 1.3rem;
+  }
+  
+  .skill-card p {
+    font-size: 0.9rem;
+  }
+  
+  .media-card {
+    padding: 30px 20px;
+  }
+  
+  .media-icon {
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+  }
+  
+  .media-card h3 {
+    font-size: 1.2rem;
+  }
+  
+  .media-card p {
+    font-size: 0.85rem;
   }
 }
 
 @media (max-width: 480px) {
   .hero {
-    padding: 60px 0;
+    padding: 40px 0;
   }
   
   .hero-title {
@@ -760,26 +838,122 @@ export default {
   }
   
   .profile-image {
-    width: 140px;
-    height: 140px;
+    width: 120px;
+    height: 120px;
   }
   
   .profile-icon {
-    font-size: 60px;
+    font-size: 50px;
   }
   
   .hero-buttons {
     flex-direction: column;
-    gap: 15px;
+    gap: 12px;
+    padding: 0 20px;
   }
   
-  .projects-grid {
-    grid-template-columns: 1fr;
+  .btn {
+    width: 100%;
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+  
+  .social-links {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    padding: 0 20px;
   }
   
   .social-link {
-    padding: 8px 12px;
+    padding: 6px 12px;
     font-size: 0.8rem;
+  }
+  
+  .container {
+    padding: 0 15px;
+  }
+  
+  .project-card {
+    margin: 0;
+  }
+  
+  .project-image {
+    height: 180px;
+  }
+  
+  .project-placeholder i {
+    font-size: 3rem;
+  }
+  
+  .project-info {
+    padding: 15px;
+  }
+  
+  .project-category {
+    font-size: 0.75rem;
+    padding: 4px 12px;
+  }
+  
+  .project-title {
+    font-size: 1.2rem;
+  }
+  
+  .project-description {
+    font-size: 0.85rem;
+  }
+  
+  .project-view-btn {
+    padding: 5px 15px;
+    font-size: 0.8rem;
+  }
+  
+  .skills-grid {
+    gap: 15px;
+  }
+  
+  .skill-card {
+    padding: 15px;
+  }
+  
+  .skill-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+  }
+  
+  .skill-card h3 {
+    font-size: 1.2rem;
+  }
+  
+  .skill-card p {
+    font-size: 0.85rem;
+  }
+  
+  .media-grid {
+    gap: 15px;
+  }
+  
+  .media-card {
+    padding: 20px 15px;
+  }
+  
+  .media-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+  }
+  
+  .media-card h3 {
+    font-size: 1.1rem;
+  }
+  
+  .media-card p {
+    font-size: 0.8rem;
+  }
+  
+  .media-link {
+    font-size: 0.85rem;
   }
 }
 </style> 

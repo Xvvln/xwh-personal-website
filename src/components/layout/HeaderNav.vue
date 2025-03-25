@@ -141,19 +141,23 @@ export default {
   .mobile-nav-toggle {
     display: flex;
     z-index: 101;
+    padding: 10px;
   }
   
   .nav-menu {
     position: fixed;
     top: 0;
     right: -100%;
-    width: 70%;
+    width: 80%;
+    max-width: 300px;
     height: 100vh;
     background-color: var(--white);
     box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
     flex-direction: column;
     justify-content: center;
-    transition: var(--transition);
+    transition: all 0.3s ease;
+    padding: 20px;
+    z-index: 100;
   }
   
   .nav-menu.active {
@@ -162,11 +166,59 @@ export default {
   
   .nav-list {
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
+    width: 100%;
   }
   
   .nav-item {
-    margin: 15px 0;
+    margin: 10px 0;
+    width: 100%;
+  }
+  
+  .nav-link {
+    display: block;
+    padding: 12px 0;
+    font-size: 1.1rem;
+    width: 100%;
+  }
+  
+  .nav-link:after {
+    display: none;
+  }
+  
+  .nav-link:hover, .router-link-active {
+    color: var(--primary-color);
+    background-color: rgba(25, 118, 210, 0.05);
+    border-radius: 8px;
+    padding-left: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    padding: 15px 0;
+  }
+  
+  .logo h1 {
+    font-size: 1.8rem;
+  }
+  
+  .mobile-nav-toggle {
+    padding: 8px;
+  }
+  
+  .mobile-nav-toggle i {
+    font-size: 1.3rem;
+  }
+  
+  .nav-menu {
+    width: 85%;
+    padding: 15px;
+  }
+  
+  .nav-link {
+    padding: 10px 0;
+    font-size: 1rem;
   }
 }
 </style> 
