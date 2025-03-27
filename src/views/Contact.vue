@@ -68,9 +68,11 @@
                   id="name" 
                   v-model="formData.name" 
                   placeholder="请输入您的姓名"
+                  :class="{'input-error': errors.name}"
                   required
                 >
               </div>
+              <div v-if="errors.name" class="error-message">{{ errors.name }}</div>
             </div>
             
             <div class="form-group">
@@ -82,9 +84,11 @@
                   id="email" 
                   v-model="formData.email" 
                   placeholder="请输入您的邮箱"
+                  :class="{'input-error': errors.email}"
                   required
                 >
               </div>
+              <div v-if="errors.email" class="error-message">{{ errors.email }}</div>
             </div>
             
             <div class="form-group">
@@ -96,9 +100,11 @@
                   id="subject" 
                   v-model="formData.subject" 
                   placeholder="请输入消息主题"
+                  :class="{'input-error': errors.subject}"
                   required
                 >
               </div>
+              <div v-if="errors.subject" class="error-message">{{ errors.subject }}</div>
             </div>
             
             <div class="form-group">
@@ -109,16 +115,26 @@
                   id="message" 
                   v-model="formData.message" 
                   placeholder="请输入您的消息内容"
+                  :class="{'input-error': errors.message}"
                   rows="5"
                   required
                 ></textarea>
               </div>
+              <div v-if="errors.message" class="error-message">{{ errors.message }}</div>
             </div>
             
             <button type="submit" class="btn primary" :disabled="isSubmitting">
               <i class="fas fa-paper-plane"></i> {{ isSubmitting ? '发送中...' : '发送消息' }}
               <span class="btn-overlay"></span>
             </button>
+            
+            <!-- 提交状态提示 -->
+            <div v-if="submitStatus === 'success'" class="submit-message success">
+              <i class="fas fa-check-circle"></i> 消息已成功发送！我会尽快回复您。
+            </div>
+            <div v-if="submitStatus === 'error'" class="submit-message error">
+              <i class="fas fa-exclamation-circle"></i> 发送失败，请稍后再试！
+            </div>
           </form>
         </div>
       </div>
@@ -148,20 +164,103 @@ export default {
         subject: '',
         message: ''
       },
-      isSubmitting: false
+      errors: {
+        name: '',
+        email: '',
+        subject: '',
+        message: ''
+      },
+      isSubmitting: false,
+      submitStatus: null // 'success', 'error', null
     }
   },
   methods: {
-    submitForm() {
-      this.isSubmitting = true
+    validateForm() {
+      let isValid = true;
+      // 重置错误信息
+      this.errors = {
+        name: '',
+        email: '',
+        subject: '',
+        message: ''
+      };
       
-      // 这里通常会有一个API调用来发送表单数据
-      // 由于这是一个演示，我们只是模拟API调用
-      setTimeout(() => {
-        alert('消息已发送！我会尽快回复您。')
-        this.resetForm()
-        this.isSubmitting = false
-      }, 1000)
+      // 名称验证
+      if (!this.formData.name.trim()) {
+        this.errors.name = '请输入您的姓名';
+        isValid = false;
+      }
+      
+      // 邮箱验证
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!this.formData.email.trim()) {
+        this.errors.email = '请输入您的邮箱';
+        isValid = false;
+      } else if (!emailRegex.test(this.formData.email)) {
+        this.errors.email = '请输入有效的邮箱地址';
+        isValid = false;
+      }
+      
+      // 主题验证
+      if (!this.formData.subject.trim()) {
+        this.errors.subject = '请输入消息主题';
+        isValid = false;
+      }
+      
+      // 消息验证
+      if (!this.formData.message.trim()) {
+        this.errors.message = '请输入消息内容';
+        isValid = false;
+      } else if (this.formData.message.trim().length < 10) {
+        this.errors.message = '消息内容至少需要10个字符';
+        isValid = false;
+      }
+      
+      return isValid;
+    },
+    submitForm() {
+      // 表单验证
+      if (!this.validateForm()) {
+        return;
+      }
+      
+      this.isSubmitting = true;
+      this.submitStatus = null;
+      
+      // 创建表单数据对象
+      const formData = {
+        name: this.formData.name,
+        email: this.formData.email,
+        subject: this.formData.subject,
+        message: this.formData.message
+      };
+      
+      // 发送到Formspree
+      fetch('https://formspree.io/f/movenaay', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error('网络响应不正常');
+      })
+      .then(data => {
+        this.submitStatus = 'success';
+        this.resetForm();
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        this.submitStatus = 'error';
+      })
+      .finally(() => {
+        this.isSubmitting = false;
+      });
     },
     resetForm() {
       this.formData = {
@@ -169,7 +268,13 @@ export default {
         email: '',
         subject: '',
         message: ''
-      }
+      };
+      this.errors = {
+        name: '',
+        email: '',
+        subject: '',
+        message: ''
+      };
     }
   }
 }
@@ -510,6 +615,30 @@ input:focus + i, textarea:focus + i {
   color: var(--primary-color);
 }
 
+.input-error {
+  border-color: var(--error) !important;
+  background-color: rgba(244, 67, 54, 0.02);
+}
+
+.input-error + i {
+  color: var(--error) !important;
+}
+
+.error-message {
+  color: var(--error);
+  font-size: 0.85rem;
+  margin-top: 5px;
+  display: flex;
+  align-items: center;
+  animation: fadeIn 0.3s ease;
+}
+
+.error-message::before {
+  content: "⚠️";
+  margin-right: 5px;
+  font-size: 0.85rem;
+}
+
 textarea {
   resize: vertical;
   min-height: 120px;
@@ -548,6 +677,39 @@ button[type="submit"]:hover .btn-overlay {
 
 button[type="submit"] i {
   margin-right: 8px;
+}
+
+/* 提交状态样式 */
+.submit-message {
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 8px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  animation: fadeIn 0.5s ease;
+}
+
+.submit-message i {
+  margin-right: 10px;
+  font-size: 1.2rem;
+}
+
+.submit-message.success {
+  background-color: rgba(76, 175, 80, 0.1);
+  color: #4caf50;
+  border-left: 4px solid #4caf50;
+}
+
+.submit-message.error {
+  background-color: rgba(244, 67, 54, 0.1);
+  color: #f44336;
+  border-left: 4px solid #f44336;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .map-section {
