@@ -25,6 +25,11 @@ module.exports = defineConfig({
       hints: false
     }
   },
+  css: {
+    extract: process.env.NODE_ENV === 'production' ? {
+      ignoreOrder: true
+    } : false
+  },
   chainWebpack: config => {
     config.plugin('html').tap(args => {
       args[0].title = 'xwh - 前端开发工程师';
