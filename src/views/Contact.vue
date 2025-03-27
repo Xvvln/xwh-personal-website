@@ -250,7 +250,7 @@ export default {
         }
         throw new Error('网络响应不正常');
       })
-      .then(data => {
+      .then(() => {
         this.submitStatus = 'success';
         this.resetForm();
       })
